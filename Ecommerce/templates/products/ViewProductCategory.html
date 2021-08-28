@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% load static %} {% block css %} .large{
+font-size:80rem; } {% endblock css %} {% block content %}
+
+<!--Section: Block Content-->
+<section class="text-center">
+  <div class="container-fluid">
+    <h1 class="fs-1 mt-3 mb-5 alert alert-primary">Top offer on sale</h1>
+    <!-- Grid row -->
+    <div class="row">
+      <!-- Grid column -->
+      {% for prod in subcategory %}
+      <div class="col-md-6 col-lg-3 mb-2">
+        <!-- Card -->
+        <div class="">
+          <div class="view zoom z-depth-2 rounded">
+            <a href="{% url 'viewproductlist' prod.id %}">
+              <div class="mask">
+                <img class="img-fluid" src="{{prod.subimage.url}}" />
+                <div class="mask rgba-black-slight"></div>
+              </div>
+            </a>
+          </div>
+          <div class="pt-4">
+            <h3 class="fs-2 text-uppercase">{{prod.subcat}}</h3>
+          </div>
+        </div>
+        <!-- Card -->
+      </div>
+      {% endfor %}
+    </div>
+    <!-- Grid row -->
+  </div>
+</section>
+<!--Section: Block Content-->
+
+{% endblock content %}

@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% comment %} Cart page  {% endcomment %}
+{% block content %}
+
+
+<div class="container">
+{% comment %} if items exist in cart  {% endcomment %}
+  {% if cartitem %}
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="mb-3">
+          <div class="pt-4 wish-list">
+            <h5 class="mb-4">Cart (<span>{{cartitem.count}}</span> items)</h5>
+            {% comment %} display all cart items  {% endcomment %}
+            {% comment %} loop starts here  {% endcomment %}
+            {% for items in cartitem %}
+              <div class="row mb-4">
+                <div class="col-md-5 col-lg-3 col-xl-3">
+                  <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+                    <a href="{% url 'viewproductdetail' items.product.id%}">
+                      <img class="img-fluid w-50"
+                      src="{{items.product.image.url}}" alt="Sample">
+                    </a>
+                  </div>
+                </div>
+                <div class="col-md-7 col-lg-9 col-xl-9 d-flex">
+                  <div>
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <h4>{{items.product.ProductName}}</h4>
+                        <p class="mb-3  text-uppercase small">{{items.product.ProductCat.Category }} - {{items.product.ProductCat}}</p>
+                      </div>
+                      <div>
+                        <input type="number"  class="input-sm form-control "value="{{items.quantity}}">
+                        <p class="mb-0"><span><strong id="summary"><i class="fas fa-rupee-sign fa-xs"></i>{{items.product.ProductPrice}}</strong></span></p class="mb-0">
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        {% comment %} button to remove item from the cart  {% endcomment %}
+                        <a href="{% url 'removeitem' items.id %}" type="button" class="card-link-secondary small text-uppercase mr-3 mx-2"><i class="fas fa-trash-alt mr-1 mx-2"></i> Remove item </a>
+                        {% comment %} button to move the item to the wishlist {% endcomment %}
+                        <a href="{% url 'wishlist' items.id %}" type="button" class="card-link-secondary small text-uppercase"><i
+                            class="fas fa-heart mr-1"></i> Move to wish list </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+            {% comment %} items display ends here {% endcomment %}
+            <hr class="mb-4">
+            <p class="text-primary mb-0"><i class="fas fa-info-circle mr-1"></i> Do not delay the purchase, adding items to your cart does not mean booking them.</p>
+
+          </div>
+        </div>
+      </div>
+
+      {% comment %} display the delivery time of the products if byuied today  {% endcomment %}
+      <div class="col-lg-4">
+        <div class="mb-3">
+          <div class="pt-4">
+            <h3 class="mb-4 alert-info">Delivery by {{delivery}}</h3>
+            <h5 class="mb-3">The total amount of</h5>
+
+            {% comment %} display the overall order cost  {% endcomment %}
+            <ul class="list-group list-group-flush">
+
+              <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                Temporary amount
+                <span><i class="fas fa-rupee-sign fa-xs"></i> {{amount}}</span>
+              </li>
+
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Shipping
+                {% if amount  > 10000 %}
+                  <span>Free</span>
+                {% else %}
+                <span><i class="fas fa-rupee-sign fa-xs"></i> {{50}}</span>
+                {% endif %}
+              </li>
+
+              <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                <div>
+                  <strong>The total amount of</strong>
+                  <strong>
+                    <p class="mb-0">(including GST)</p>
+                  </strong>
+                </div>
+                <span><strong><i class="fas fa-rupee-sign fa-xs"></i> {{amount}}</strong></span>
+              </li>
+            </ul>
+
+            {% comment %} these is for address if required in the Future  {% endcomment %}
+            {% comment %} address  {% endcomment %}
+            {% comment %} {% for address in address %}
+              <div class="card mx-auto mb-2">
+                <div class="card-header">Address line - {{forloop.counter}} <a href="{% url 'editaddress' address.id %}" class="btn btn-warning float-end mx-2 ">Edit</a> <a href="{% url 'deladdress' address.id %}" class="btn btn-danger float-end mx-2">Delete</a></div>
+                <div class="card-body">
+                  <div class="row">
+                  <div class="col-sm-3">Country - {{address.country}}</div>
+                  <div class="col-sm-3">State  - {{address.state}}</div>
+                  <div class="col-sm-3">city  - {{address.city}}</div>
+                  <div class="col-sm-3">pincode  - {{address.pincode}}</div>
+                  </div>
+                  <h5 class="mt-2">Address : {{address.address}} </h5>
+                </div>
+                
+              </div>
+        {% endfor %} {% endcomment %}
+            <a href="{% url 'checkout' %}" class="btn btn-warning btn-block">Checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% comment %} else display the empty cart html data  {% endcomment %}
+  {% else %}
+    <div class="container mt-5  ">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header">
+                      <h5>Cart</h5>
+                  </div>
+                  <div class="card-body cart">
+                      <div class="col-sm-12 empty-cart-cls text-center"> <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                          <h3><strong>Your Cart is Empty</strong></h3>
+                          <h4>Add something to make me happy :)</h4> <a href="/" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock content %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block css %}
+
+.myimg {
+max-width: 100%;
+max-height: 100%;
+
+}
+
+{% endblock css %}
+
+{% block content %}
+
+<!--Section: Block Content-->
+<section>
+  <div class="row mt-5">
+
+    {% comment %} sidebar {% endcomment %}
+    <div class="col-sm-4">
+
+    </div>
+
+      {% comment %} main content {% endcomment %}
+      <div class="col-sm-8">
+      {% for items in products   %}
+        <div class="row mb-4 ">
+          <div class="col-md-5 col-lg-3 col-xl-3">
+
+            {% comment %} <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0"> {% endcomment %}
+            
+              <a href="{% url 'viewproductdetail' items.id %}">
+                <img class="img-fluid w-50"
+                src="{{items.image.url}}"
+                alt="{{items.ProductName}}">
+              </a>
+            {% comment %} </div> {% endcomment %}
+
+          </div>
+            <div class="col-md-7 col-lg-9 col-xl-9 mt-5">
+            <div class="row">
+              <div class="col-lg-7 col-xl-7">
+
+                <h3>{{items.ProductName}}</h3>
+                <h4 class="mb-2 text-uppercase small">{{items.ProductCat}}</h4>
+                
+                <hr>
+                <h5 class="mb-lg-0 font-weight-bold">{{items.ProductDesc}}</h5>
+
+              </div>
+              <div class="col-lg-5 col-xl-5">
+
+                <h5 class="mb-3">
+                <span class="mx-2"><i class="fas fa-rupee-sign fa-xs"></i> {{items.discountprice|intcomma}}</span>
+                <span class="text-grey text-muted"><s><i class="fas fa-rupee-sign fa-xs"></i>{{items.ProductPrice}}</s></span>
+                </h5>
+                <div class="my-4">
+                  <a href="{% url 'cart' items.id %}" class="btn btn-primary btn-md mr-1 mb-2 mx-1"><i class="fas fa-shopping-cart pr-2"></i>Add to cart</a>
+
+                  <a href="{% url 'viewproductdetail' items.id %}" class="btn btn-warning btn-md mr-1 mb-2 mx-1"><i class="fas fa-info-circle pr-2"></i>Details</a>
+                  
+                  
+                </div>
+                <a href="{% url 'wishlist' items.id %}" class="btn btn-danger btn-md px-3 mb-lg-2 material-tooltip-main"><i
+                    class="far fa-heart" data-toggle="tooltip" data-placement="top"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="row mx-auto">
+    <h1>You might be looking for </h1>
+    <div class="row mt-0 mb-5 bg-light mx-5">
+        {% for items in similarprod %}
+          <div class="col mt-5 mx-2">
+            <div class="card h-100">
+            
+                <img src="{{items.image.url}}" class="img-fluid mx-auto w-25 mt-2 " alt="{{items}}" />
+                <a href="{% url 'viewproductdetail' items.id %}" class="nav-link text-dark">
+                <div class="card-body">
+                <h5 class="card-title fs-3 text-center">{{items}}</h5>
+                <div class="text-center">
+                <span class="mx-2 fs-4 d-block"><i class="fas fa-rupee-sign fa-xs"></i> {{items.discountprice|intcomma}}</span>
+                <span class="text-grey text-muted fs-4 "><s class="text-success"><i class="fas fa-rupee-sign fa-xs mx-1"></i>{{items.ProductPrice}}</s></span>
+                </div>
+                </div>
+                </a>
+            </div>
+          </div>
+          {% comment %}  {% endcomment %}
+         
+        {% endfor %}
+
+
+                {% comment %} {% if products.has_previous %}
+          <a href="?page={{products.previous_page_number}}">Previous</a>
+        {% endif %}
+
+        <span>{{products.number}}</span>
+
+        {% if products.has_next %}
+          <a href="?page={{products.next_page_number}}">Next</a>
+        {% endif %} {% endcomment %}
+  </div>
+</section>
+<!--Section: Block Content-->
+
+{% endblock content %}

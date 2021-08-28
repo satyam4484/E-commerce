@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+
+{% comment %} display all search results  {% endcomment %}
+<section class="container-fluid mt-4">
+  <h1 class="text-center mb-5">Search results for {{query}}</h1>
+  <hr>
+  <div class="row">
+  {% comment %} if products exist  {% endcomment %}
+    {% if products %}
+      {% for prod in products %}
+
+      <div class="col-md-3 mb-4">
+        <div class="text-center">
+          <a href="{% url 'viewproductdetail' prod.id %}" class="">
+            <img class="img-fluid w-25 mx-5" src="{{prod.image.url}}"
+              alt="Sample">
+          </a>
+        </div>
+        <div class="text-center pt-4">
+          <h4>{{prod.ProductName}}</h4>
+          <h5 class="mb-2 text-uppercase">{{prod.ProductCat.Category}}</h5>
+          <hr>
+          <h3 class="mb-3">
+          <i class="fas fa-rupee-sign fa-xs"></i> {{prod.ProductPrice|intcomma}}
+          </h4>
+
+          {% comment %} button to add to cart  {% endcomment %}
+          <a href="{% url 'cart' prod.id %}" class="btn btn-primary btn-sm mr-1 mb-2 mx-2"><i class="fas fa-shopping-cart pr-2"></i>Add to cart</a>
+          {% comment %} button to get details of the product  {% endcomment %}
+          <a href="{% url 'viewproductdetail' prod.id %}" class="btn btn-light btn-sm mr-1 mb-2 mx-2"><i class="fas fa-info-circle pr-2"></i>Details</a>
+
+          {% comment %} these is the wish list which needs to be implemented  {% endcomment %}
+          <a href="#" data-placement="top" title="Add to wishlist" class="btn btn-danger btn-sm px-3 mx-2 mb-2 material-tooltip-main" data-toggle="tooltip"><i class="far fa-heart"></i></a>
+        </div>
+
+      </div>
+      {% endfor %}
+
+      {% else %}
+        {% comment %} else diplay no product found  {% endcomment %}
+          <h1 class="alert alert-danger text-center">No Reults found</h1>
+    {% endif %}
+  <!-- Grid column -->
+  </div>
+
+  {% comment %} --------------------- these is for the pagination which needs to be implment  {% endcomment %}
+  {% if products.has_previous %}
+    <a href="?page={{products.previous_page_number}}">Previous</a>
+  {% endif %}
+
+  <span>{{products.number}}</span>
+
+  {% if products.has_next %}
+    <a href="?page={{products.next_page_number}}">Next</a>
+  {% endif %}
+
+  {% comment %} pagination ends here  {% endcomment %}
+  <!-- Grid row -->
+
+</section>
+{% endblock content %}

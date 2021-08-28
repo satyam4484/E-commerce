@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% comment %} css Classes for the home page  {% endcomment %}
+ {% block css %} 
+.myclass {
+  overflow: auto;
+  flex-wrap:
+  wrap; 
+}
+hr
+{
+    background-color: #eee;
+    border: 4px solid red;
+    color: #eee;
+    height: 5px;
+}
+
+{% endblock css %} 
+
+{% comment %} ******************  Html Content ************************************************************* {% endcomment %}
+{% block content %}
+
+  {% comment %} below the navbar the Category of products  {% endcomment %}
+  <div class="container-fluid mx-2">
+    <div class="row myclass d-flex mb-0">
+      <ul class="d-flex mt-1 mb-0">
+        {% comment %} traverse each Category  {% endcomment %}
+        {% for cat in category %}
+        <li class="mx-auto nav-item text-center">
+          <a class="nav-link fs-4" href="{% url 'viewcatgeory' cat.id %}">
+            <img class="card-img-top" src="{{cat.image.url}}" alt="Card image cap" style="width: 4rem; height: 4rem"/>
+            <p>{{cat.category}}</p>
+          </a>
+        </li>
+        {% endfor %}
+        {% comment %} End the Traversal here for the Category  {% endcomment %}
+      </ul>
+    </div>
+    <hr />
+  </div>
+
+{% comment %} main content & subcategory of the items {% endcomment %}
+  <div class="container-fluid">
+    {% comment %} since it is dict of Cat , sub  {% endcomment %}
+    {% for key , values in totalitems.items %}
+      {% comment %} card for each Category  {% endcomment %}
+      <div class="row mt-0 mb-5 bg-light mx-5">
+        <h3 class="font-weight-bold text-uppercase mt-2 fs-2">{{key}}<a href="{% url 'viewcatgeory' key.id %}" class="float-end btn btn-primary mt-1 btn-sm fs-4">See more</a></h3>
+
+        {% comment %} Traverse the subcategory  {% endcomment %}
+        {% for items in values %}
+          {% comment %} will display only seven subcategory {% endcomment %}
+          {% if forloop.counter < 7 %}
+            <div class="col-sm-2 mb-2">
+              <div class="card h-100">
+              
+                <img src="{{items.subimage.url}}" class="img-fluid mx-auto w-25 mt-2 " alt="{{items}}" />
+                <a href="{% url 'viewproductlist' items.id %}" class="nav-link text-dark">
+                <div class="card-body">
+                  <h5 class="card-title fs-3 text-center">{{items}}</h5>
+                </div>
+                </a>
+              </div>
+            </div>
+          {% endif %}
+          {% comment %} if ends here {% endcomment %}
+        {% endfor %}
+        {% comment %} innser for loops ends here  {% endcomment %}
+      </div>
+      <hr />
+    {% endfor %} 
+    {% comment %} outer loops ends here  {% endcomment %} 
+  </div>
+{% endblock content %}

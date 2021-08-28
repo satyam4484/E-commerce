@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+
+<section class="mb-5 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4 mb-md-0 ">
+                    <div class="col-12 mb-4 mx-5">
+                        <a href="{{product.image.url}}" data-size="400x500">
+                            <img src="{{product.image.url}}" class="img-fluid ">
+                        </a>
+                    </div>
+            </div>
+            <div class="col-md-5 offset-1">
+                <h1 class="fs-2">{{product.ProductName}}</h1>
+                <h3 class="mb-2 text-uppercase ">{{product.ProductCat}}</h3>
+                <span class="mx-2 fs-4"><i class="fas fa-rupee-sign fa-xs"></i> {{product.discountprice|intcomma}}</span>
+                <span class="text-grey text-muted"><s class="text-success"><i class="fas fa-rupee-sign fa-xs"></i>{{product.ProductPrice}}</s></span>
+                <h4 class="mt-4 ">Description</h4>
+                <p class="pt-1 text-b">{{product.ProductDesc}}</p>
+                <hr>
+                <a href="{% url 'checkout' %}" class="btn btn-warning btn-md mr-1 mb-2 mx-1">Buy now</a>
+
+                <a href="{% url 'cart' product.id %}" class="btn btn-primary btn-md mr-1 mb-2 mx-1"><i class="fas fa-shopping-cart pr-2"></i>Add to cart</a>
+            </div>
+        </div>
+    </div>
+            <hr>
+    <div class="container-fluid mx-3">
+        <div class="row mt-0 mb-5 bg-light mx-5">
+                <h1 class="fs-1">Similar Products </h1>
+            {% for items in similarProd %}
+            <div class="col ">
+            <div class="card h-100">
+            
+                <img src="{{items.image.url}}" class="img-fluid mx-auto w-25 mt-2 " alt="{{items}}" />
+                <a href="{% url 'viewproductdetail' items.id %}" class="nav-link text-dark">
+                <div class="card-body">
+                <h5 class="card-title fs-3 text-center">{{items}}</h5>
+                <div class="text-center">
+                <span class="mx-2 fs-4 d-block"><i class="fas fa-rupee-sign fa-xs"></i> {{items.discountprice|intcomma}}</span>
+                <span class="text-grey text-muted fs-4 "><s class="text-success"><i class="fas fa-rupee-sign fa-xs mx-1"></i>{{items.ProductPrice}}</s></span>
+                </div>
+                </div>
+                </a>
+            </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

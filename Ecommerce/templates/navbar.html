@@ -1,0 +1,87 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+{% comment %} navbar navbar-expand-md navbar-dark bg-dark fixed-top scrolling-navbar {% endcomment %}
+  <div class="container-fluid">
+    <a class="navbar-brand fs-4 mx-auto" href="/"><i class="fas fa-shopping-cart mx-2"></i>Ecommerce</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mx-auto mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link fs-4 mx-2" aria-current="page" href="/">Home</a>
+        </li>
+
+        <li class="nav-item mt-2">
+            <form class="d-flex mb-1" action="{% url 'search' %}">
+            {% comment %} {% csrf_token %} {% endcomment %}
+            <input class="form-control me-2 sr" id="tags" name="query" placeholder="Required Anything! search here..." type="search" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" >
+            <button class="btn btn-primary" type="submit">Search</button>
+            {% comment %} <div class="autoComplete_wrapper">
+              <input id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
+          </div> {% endcomment %}
+        </form>
+          </li>
+      </ul>
+      
+      
+      <ul class="navbar-nav ml-auto">
+      {% if request.user.is_authenticated %}
+      <li class="nav-item">
+        <a href="{% url 'profile' %}" class="nav-link waves-effect">
+          profile
+        </a>
+      </li>
+      {% endif %}
+      {% comment %} <li class="nav-item">
+        <a href="{% url 'contact' %}" class="nav-link waves-effect">
+          Contact
+        </a>
+      </li> {% endcomment %}
+
+      {% comment %} ----------------------------- {% endcomment %}
+      {% comment %} <span class="fa-stack fa-5x has-badge" data-count="8,888,888">
+        <i class="fa fa-circle fa-stack-2x">85</i>
+        <i class="fa fa-bell fa-stack-1x fa-inverse"></i>
+      </span> {% endcomment %}
+
+      {% comment %} --------------------------------- {% endcomment %}
+      <li class="nav-item">
+        <a href="{% url 'cart' %}" class="nav-link navbar-link-2 waves-effect">
+          {% if cartcount %}
+          <i class="fas fa-shopping-cart pl-0"><i class="text-danger fs-4">{{cartcount}}</i></i>
+          {% else %}
+          <i class="fas fa-shopping-cart pl-0"></i>
+          {% endif %}
+        </a>
+      </li>
+      {% if request.user.is_authenticated %}
+      <li class="nav-item">
+        <a href="{% url 'logout' %}" class="nav-link waves-effect">
+         <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+        </a>
+      </li>
+      {% else %}
+      <li class="nav-item ">
+        <a href="{% url 'signup' %}" type="button"
+          class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light mx-2">Sign up</a>
+        <a href="{% url 'login' %}" type="button"
+          class=" mx-2 btn btn-outline-danger btn-md btn-rounded btn-navbar waves-effect waves-light">Login</a>
+      </li>
+      {% endif %} 
+       {% comment %} <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-user"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink-333">
+          <a class="dropdown-item" href="#!">Action</a>
+          <a class="dropdown-item" href="#!">Another action</a>
+          <a class="dropdown-item" href="#!">Something else here</a>
+        </div>
+      </li> {% endcomment %}
+      
+    </ul>
+    </div>
+  </div>
+</nav>

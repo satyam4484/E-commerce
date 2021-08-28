@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load humanize %} 
+
+{% block content %}
+
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-sm-3">
+      <h1 class="text-center alert-primary mt">{{profile.getusername}}</h1>
+      <div class="">
+        <ul>
+          <h2>
+            <li class="nav-item active">
+              <a href="" id="profile" class="nav-link fs-2"> My profile</a>
+            </li>
+          </h2>
+          <h2>
+            <li class="nav-item">
+              <a href="" id="order" class="nav-link fs-2"> Myorder</a>
+            </li>
+          </h2>
+          <h2>
+            <li class="nav-item">
+              <a href="" id="wish" class="nav-link fs-2"> MyWishlist</a>
+            </li>
+          </h2>
+        </ul>
+      </div>
+    </div>
+
+    {% comment %} content {% endcomment %}
+    <div class="col-sm-8 offset-1 pro mb-2">
+      <h1 class="text-center">Your data</h1>
+        <a href="{% url 'editprofile' %}" class=" btn btn-primary float-end">Edit profile</a>
+        <a href="{% url 'changepassword' %}" class=" btn btn-warning mx-2 float-end">Change Password</a>
+      <div class="d-inline">
+        <h4 class="">First name : {{request.user.first_name}}</h4>
+      </div>
+      <div class="">
+        <h4 class="">Last name : {{request.user.last_name}}</h4>
+      </div>
+      <div class=""><h4>Email address :{{request.user.email}}</h4></div>
+      <div class=""><h4>Mobile no : {{profile.mobileno}}</h4></div>
+      <div class=""><h4>gender : {{profile.gender}}</h4></div>
+      <hr />
+      <hr />
+
+      <h1 class="d-flex mt-2">Address Details</h1>
+      <a href="{% url 'editaddress' %}" class="btn btn-primary btn-lg mx-2 mb-5 ">Add Address</a>
+        {% for address in address %}
+          <div class="card mx-auto mb-2">
+              <div class="card-header">Address line - {{forloop.counter}} <a href="{% url 'editaddress' address.id %}" class="btn btn-warning float-end mx-2 ">Edit</a> <a href="{% url 'deladdress' address.id %}" class="btn btn-danger float-end mx-2">Delete</a></div>
+              <div class="card-body">
+                <div class="row">
+                <div class="col-sm-3">Country - {{address.country}}</div>
+                <div class="col-sm-3">State  - {{address.state}}</div>
+                <div class="col-sm-3">city  - {{address.city}}</div>
+                <div class="col-sm-3">pincode  - {{address.pincode}}</div>
+                </div>
+                <h5 class="mt-2">Address : {{address.address}} </h5>
+              </div>
+          </div>
+      {% endfor %}
+    </div>
+
+    {% comment %} my order content  {% endcomment %}
+    <div class="col-sm-9 offset-0 fs-4 pro1 d-none">
+      <h1 class="text-center bg-danger">Your orders</h1>
+      {% if orders %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Item Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Item Price</th>
+            <th scope="col">Total Price</th>
+            <th scope="col">Ordered Date</th>
+            <th scope="col">Shipping Address</th>
+            <th scope="col">Delivered</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            {% for orderdetail in order.item.all %}
+            <tr>
+              <td>
+                <a
+                  class="nav-link"
+                  href="{% url 'viewproductdetail' orderdetail.product.id %}"
+                  >{{orderdetail.product}}</a
+                >
+              </td>
+              <td>{{orderdetail.quantity}}</td>
+              <td>
+                <i class="fas fa-rupee-sign fa-xs"></i
+                >{{orderdetail.product.ProductPrice| intcomma}}
+              </td>
+              <td>
+                <i class="fas fa-rupee-sign fa-xs"></i
+                >{{orderdetail.get_total_price | intcomma}}
+              </td>
+
+              <td>{{order.getdate}}</td>
+              <td>{{order.shipping_address}}</td>
+
+              {% if order.delivered %}
+                <td>YES</td>
+              {% else %}
+                <td>NO</td>
+              {% endif %}
+            </tr>
+            {% endfor %} 
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% else %}
+        <h1 class"text-center">You have no placed any order yet </h1>
+      {% endif %}
+    </div>
+    {% comment %} wishlist content {% endcomment %}
+    <div class="col-sm-9 offset-0 fs-4 pro2 d-none">
+      <h1 class="text-center bg-danger">Your wishlist</h1>
+      {% if orders %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Item Name</th>
+            <th scope="col">Item Price</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for wish in wishlist %} 
+            <tr>
+              <td>
+              <a
+                class="nav-link"
+                href="{% url 'viewproductdetail' wish.product.id %}"
+                >{{wish.product.ProductName}}</a
+              >
+            </td>
+            <td>
+              <h4><i class="fas fa-rupee-sign fa-xs mx-2"></i>{{wish.product.discountprice |intcomma}}</h4>
+            </td>
+              <td>
+              <a class="btn btn-danger" href="{% url 'removewish' wish.product.id %}">Remove</a
+              >
+              </td>
+            </tr>
+         {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <h1 class"text-center">You have no placed any order yet </h1>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %} {% block js %}
+<script>
+  document.getElementById("profile").addEventListener("click", (e) => {
+    document.querySelector(".pro").classList.remove("d-none");
+    document.querySelector(".pro1").classList.add("d-none");
+    document.querySelector(".pro2").classList.add("d-none");
+    e.preventDefault();
+  });
+
+  document.getElementById("order").addEventListener("click", (e) => {
+    document.querySelector(".pro").classList.add("d-none");
+    document.querySelector(".pro2").classList.add("d-none");
+    document.querySelector(".pro1").classList.remove("d-none");
+    e.preventDefault();
+  });
+
+  document.getElementById("wish").addEventListener("click", (e) => {
+    document.querySelector(".pro").classList.add("d-none");
+    document.querySelector(".pro1").classList.add("d-none");
+    document.querySelector(".pro2").classList.remove("d-none");
+    e.preventDefault();
+  });
+</script>
+
+{% endblock js %}
