@@ -11,7 +11,8 @@
   - make you are in the folder where the file python manage.py exists , then run the command `python manage.py runserver ` to start the server , click the link and you will be redirected to webpage of the project .
 
 ___
-
+# Watch the vedio
+[![Alt text](images/home.png)](https://youtu.be/2bBJpupWWog)
 # Project images 
   - ## Home page 
     - ## These is how the home page looks 
